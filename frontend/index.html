@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our College Memories – Farewell 2026</title>
+  <link rel="stylesheet" href="style.css"/>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     AUDIO PLAYER
+═══════════════════════════════════════════════ -->
+<div id="music-player">
+  <audio id="bg-music" loop>
+    <source src="musicfarewell.mp3" type="audio/mpeg"/>
+  </audio>
+  <button id="music-btn" onclick="toggleMusic()" title="Toggle Music">
+    <span id="music-icon">♪</span>
+    <span id="music-label">Play Music</span>
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-brand">✦ Farewell 2026</div>
+  <ul class="nav-links">
+    <li><a href="#upload">Upload</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <!-- <li><a href="#carousel">3D Carousel</a></li> -->
+    <li><a href="#event">Event</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#messages">Messages</a></li>
+  </ul>
+  <button class="nav-pdf-btn" onclick="downloadPDF()">📖 Memory Book</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     HERO SECTION
+═══════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">SCET journey of 2022-26</p>
+    <h1 class="hero-title">
+      <span class="line-1">Our College</span>
+      <span class="line-2">Memories</span>
+    </h1>
+    <p class="hero-subtitle">A journey we will never forget.</p>
+    <div class="hero-cta">
+      <a href="#gallery" class="btn-primary">View Memories</a>
+      <a href="#upload"  class="btn-secondary">Share Yours</a>
+    </div>
+  </div>
+ 
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     UPLOAD MEMORY SECTION
+═══════════════════════════════════════════════ -->
+<section id="upload" class="section">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-tag">✦ Share Your Story</span>
+      <h2>Upload a Memory</h2>
+      <p>Preserve your most cherished college moments forever.</p>
+    </div>
+
+    <form id="upload-form" class="upload-form" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Adhithya Gowda" required/>
+        </div>
+        <div class="form-group">
+          <label for="title">Memory Title</label>
+          <input type="text" id="title" name="title" placeholder="e.g. Our Last Canteen Lunch" required/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="story">Your Story</label>
+        <textarea id="story" name="story" rows="5" placeholder="Share what made this moment special…" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Photo</label>
+        <div class="file-drop-zone" id="drop-zone">
+          <input type="file" id="photo" name="photo" accept="image/*" required/>
+          <div class="drop-zone-content">
+            <div class="drop-zone-icon">📸</div>
+            <p>Drag & drop your photo here, or <span>browse</span></p>
+            <small>JPG, PNG, WEBP up to 10MB</small>
+          </div>
+          <div class="photo-preview-wrap" id="photo-preview-wrap" style="display:none;">
+            <img id="photo-preview" alt="preview"/>
+            <button type="button" class="remove-photo" onclick="removePhoto()">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span id="submit-text">Upload Memory ✦</span>
+        <span id="submit-loader" class="loader" style="display:none;"></span>
+      </button>
+
+      <div id="upload-msg" class="upload-msg"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     MEMORY GALLERY
+═══════════════════════════════════════════════ -->
+<section id="gallery" class="section section-dark">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-tag">✦ All Memories</span>
+      <h2>Memory Gallery</h2>
+      <p>Every photo, every story — treasured forever.</p>
+    </div>
+    <div id="gallery-grid" class="gallery-grid">
+      <div class="gallery-loading">
+        <div class="spinner"></div>
+        <p>Loading memories…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     3D CAROUSEL
+═══════════════════════════════════════════════ -->
+<!-- <section id="carousel" class="section">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-tag">✦ 3D Gallery</span>
+      <h2>Memories in Motion</h2>
+      <p>Spin through the highlights of our journey.</p>
+    </div>
+    <div class="carousel-scene">
+      <div class="carousel-stage" id="carousel-stage">
+        <!- Cards injected by JS ->
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button onclick="rotateLeft()"  class="carousel-btn">&#8592; Prev</button>
+      <button onclick="pauseCarousel()" class="carousel-btn" id="pause-btn">⏸ Pause</button>
+      <button onclick="rotateRight()" class="carousel-btn">Next &#8594;</button>
+    </div>
+  </div>
+</section> -->
+
+<!-- ═══════════════════════════════════════════════
+     FAREWELL EVENT
+═══════════════════════════════════════════════ -->
+<section id="event" class="section section-dark">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-tag">✦ You're Invited</span>
+      <h2>Farewell Party</h2>
+    </div>
+    <div class="event-card">
+      <div class="event-detail">
+        <div class="event-icon">🎉</div>
+        <div>
+          <h3>Event</h3>
+          <p>Farewell Party – Class of 2026</p>
+        </div>
+      </div>
+      <div class="event-detail">
+        <div class="event-icon">📅</div>
+        <div>
+          <h3>Date</h3>
+          <p>March 18, 2026</p>
+        </div>
+      </div>
+      <div class="event-detail">
+        <div class="event-icon">⏰</div>
+        <div>
+          <h3>Time</h3>
+          <p>10:00 AM onwards</p>
+        </div>
+      </div>
+      <div class="event-detail">
+        <div class="event-icon">📍</div>
+        <div>
+          <h3>Venue</h3>
+          <p>College Auditorium, Main Campus</p>
+        </div>
+      </div>
+    </div>
+    <div class="event-countdown" id="countdown">
+      <div class="count-box"><span id="cd-days">00</span><small>Days</small></div>
+      <div class="count-box"><span id="cd-hours">00</span><small>Hours</small></div>
+      <div class="count-box"><span id="cd-mins">00</span><small>Minutes</small></div>
+      <div class="count-box"><span id="cd-secs">00</span><small>Seconds</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     TIMELINE
+═══════════════════════════════════════════════ -->
+<section id="timeline" class="section">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-tag">✦ Our Journey</span>
+      <h2>Four Years, One Story</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item left" data-year="2022">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="year-badge">First Year · 2022</span>
+          <h3>The Beginning</h3>
+          <p>New faces, new friendships, orientation days, and that very first scary exam. We were strangers who became a family.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right" data-year="2023">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="year-badge">Second Year · 2023</span>
+          <h3>Finding Our Footing</h3>
+          <p>Late-night study sessions, fests, first internships, and the canteen became our second home. Confidence grew with every semester.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left" data-year="2024">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="year-badge">Third Year · 2024</span>
+          <h3>Rising Higher</h3>
+          <p>Projects, placements prep, cultural fests, and unforgettable trips. Every challenge made the bond stronger.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right" data-year="2025">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="year-badge">Final Year · 2025–26</span>
+          <h3>The Golden Chapter</h3>
+          <p>Thesis battles, placements, last-bencher legends, and the bittersweet realization that all good things must end. But the memories? Forever.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     MESSAGE BOARD
+═══════════════════════════════════════════════ -->
+<section id="messages" class="section section-dark">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-tag">✦ Message Board</span>
+      <h2>Farewell Messages</h2>
+      <p>Leave a note for your classmates to remember.</p>
+    </div>
+
+    <form id="message-form" class="message-form">
+      <input type="text" id="msg-name" placeholder="Your Name" required/>
+      <textarea id="msg-text" rows="3" placeholder="Write your farewell message…" required></textarea>
+      <button type="submit" class="btn-primary">Post Message ✦</button>
+    </form>
+
+    <div id="messages-grid" class="messages-grid">
+      <div class="gallery-loading"><div class="spinner"></div><p>Loading messages…</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     LIGHTBOX
+═══════════════════════════════════════════════ -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <img id="lightbox-img" src="" alt="Memory"/>
+    <div class="lightbox-info">
+      <h3 id="lightbox-title"></h3>
+      <p  id="lightbox-name"></p>
+      <p  id="lightbox-story"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer>
+  <p>✦ Farewell 2026 — Class Forever ✦</p>
+  <p class="footer-sub">Built with love for the batch that made every moment count.</p>
+  <p>Create by Adhithya Gowda</p>
+  <button class="btn-primary pdf-footer-btn" onclick="downloadPDF()">📖 Download Memory Book (PDF)</button>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
