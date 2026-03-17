@@ -29,10 +29,18 @@ const commentsRouter  = require('./routes/comments');
 const messagesRouter  = require('./routes/messages');
 const pdfRouter       = require('./routes/pdf');
 
-app.use(process.env.FRONTEND_URL, memoriesRouter);
-app.use('/api', commentsRouter);
-app.use('/api', messagesRouter);
-app.use('/api', pdfRouter);
+// Use a single API base path (e.g., '/api') for all backend routes.
+// This keeps the frontend endpoints consistent with `frontend/script.js`.
+let API_BASE = process.env.API_BASE_PATH;
+if (typeof API_BASE !== 'string' || !API_BASE.trim()) {
+  API_BASE = '/api';
+}
+
+
+app.use(API_BASE, memoriesRouter);
+app.use(API_BASE, commentsRouter);
+app.use(API_BASE, messagesRouter);
+app.use(API_BASE, pdfRouter);
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
